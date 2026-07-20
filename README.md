@@ -1,52 +1,345 @@
-# Simple RAG Chatbot with Langchain
+<!-- ============================= -->
+<!-- Header -->
+<!-- ============================= -->
 
-## Overview
-The goal of this project is to develop a **domain-specific application** that combines the strengths of a **Large Language Model (LLM)** with the **efficiency of a vector database** for data storage and retrieval. Using **Retrieval-Augmented Generation (RAG)** for the method and **Streamlit** for the front-end, the application is built with Python.
+<h1 align="center">🧠 Toronto Travel Assistant - RAG Chatbot</h1>
 
-## Technology Stack:
-- **Frontend**: Streamlit for building the user interface.
-- **Vector Database**: Pinecone for efficient data storage and retrieval. 
-- **LLM**: OpenAI model for natural language processing and query handling.
-- **Backend**: LangChain framework utilizing the RAG method.
+<p align="center">
+  <b>Retrieval-Augmented Generation (RAG) Chatbot built with LangChain, OpenAI, Pinecone and Streamlit</b>
+</p>
 
-## Project Structure
-- **src/**: Contains Python-based chatbot script and Streamlit main script.
-- **src/materials/**: Contains data that our model will use to answer questions.
-- **report/**: Stores [Report](report) files.
-- **video/**: Contains [video](video) presentation. You can also watch the video on [YouTube](https://youtu.be/wo-0wUplqSM).
-- **.env**: Contains API keys.
+<p align="center">
 
-## Dependencies
-- Python 3.7+
-- langchain
-- pinecone-client
-- python-dotenv
-- streamlit
-- pypdf
+<img src="https://img.shields.io/badge/Python-3.11-blue">
+<img src="https://img.shields.io/badge/LangChain-Framework-green">
+<img src="https://img.shields.io/badge/OpenAI-GPT--4.1-black">
+<img src="https://img.shields.io/badge/Pinecone-VectorDB-orange">
+<img src="https://img.shields.io/badge/Streamlit-Frontend-red">
 
-## Usage
-1. Clone the repository: `git clone https://github.com/Faridghr/Simple-RAG-Chatbot.git`
-2. Navigate to the project directory: `cd Simple-RAG-Chatbot`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Set up your LLM.
-5. Set up your Pinecone API key in `.env` file.
-5. Navigate to src directory: `cd src`
-6. Run the Streamlit application: `streamlit run streamlitMain.py`
-7. Open your web browser and navigate to the URL provided by Streamlit (usually http://localhost:8501).
-8. Interact with the chatbot by typing messages and receiving responses from the local LLM service.
+</p>
 
-## Setting Up OpenAI API
-1. Enter our OpenAI account and navigate to [OpenAI Platform](https://platform.openai.com/apps). 
-2. Navigate to the API section.
-3. Proceed to create a new API key by pressing '+ Create' new secret key.
-4. Select a suitable name to remember and press the Create secret key button.
-5. Copy the secret key and add your OpenAI API Keys in a file called `.env`.
+---
 
-## Setting up Pinecone
-1. To create a PineCone account, sign up via this link: [Pinecone](https://www.pinecone.io/)
-2. After registering with the free tier, go into the project, and click on Create a Projec.
-3. Fill in the Project Name, Cloud Provider, and Environment. In this case, I have used “SimpleRAGChatbot Application” as a Project Name, GCP as Cloud Provider, and Iowa (gcp-starter) as an Environment.
-4. After the project is created, go into the API Keys section, and make sure you have an API key available. Do not share this API key.
-5. After completing the account setup, you can add your Pinecone API Keys in a file called `.env`.
+# 📌 Overview
+
+The goal of this project is to develop a domain-specific AI chatbot that combines the reasoning capability of an OpenAI Large Language Model with the efficiency of Pinecone Vector Database using Retrieval-Augmented Generation (RAG).
+
+Instead of relying entirely on the LLM's internal knowledge, the chatbot first retrieves relevant information from custom documents and then generates an accurate, context-aware response.
+
+The chatbot also supports multi-turn conversations using LangChain's conversation memory, enabling users to ask follow-up questions naturally.
+
+---
+
+# ✨ Features
+
+- ✅ Retrieval-Augmented Generation (RAG)
+- ✅ OpenAI GPT-4.1 Mini
+- ✅ OpenAI Embeddings (text-embedding-3-small)
+- ✅ Pinecone Vector Database
+- ✅ LangChain
+- ✅ Streamlit Chat Interface
+- ✅ Conversation Memory
+- ✅ Follow-up Question Support
+- ✅ Semantic Search
+- ✅ Production Style Ingestion Pipeline
+
+---
+
+# 🏗 Overall Architecture
+
+```mermaid
+flowchart LR
+
+A[User]
+
+B[Streamlit UI]
+
+C[Conversation Memory]
+
+D[History Aware Retriever]
+
+E[OpenAI Embeddings]
+
+F[Pinecone Vector Database]
+
+G[Top K Relevant Chunks]
+
+H[Prompt Template]
+
+I[OpenAI GPT-4.1]
+
+J[Final Response]
+
+A --> B
+
+B --> C
+
+C --> D
+
+D --> E
+
+E --> F
+
+F --> G
+
+G --> H
+
+H --> I
+
+I --> J
+```
+
+---
+
+# 📥 Ingestion Pipeline
+
+```mermaid
+flowchart LR
+
+A[Documents TXT PDF]
+
+B[Document Loader]
+
+C[Recursive Text Splitter]
+
+D[OpenAI Embeddings]
+
+E[Pinecone Vector DB]
+
+A --> B
+
+B --> C
+
+C --> D
+
+D --> E
+```
+
+---
+
+# 📤 Retrieval Pipeline
+
+```mermaid
+flowchart LR
+
+A[User Question]
+
+B[Conversation History]
+
+C[History Aware Retriever]
+
+D[Rewrite Standalone Question]
+
+E[OpenAI Embeddings]
+
+F[Pinecone Similarity Search]
+
+G[Retrieve Top K Chunks]
+
+H[Prompt Template]
+
+I[OpenAI GPT]
+
+J[Answer]
+
+A --> B
+
+B --> C
+
+C --> D
+
+D --> E
+
+E --> F
+
+F --> G
+
+G --> H
+
+H --> I
+
+I --> J
+```
+
+---
 
 
+---
+
+# ⚙️ Technology Stack
+
+| Component | Technology |
+|------------|------------|
+| Frontend | Streamlit |
+| Backend | LangChain |
+| LLM | OpenAI GPT-4.1 Mini |
+| Embeddings | OpenAI text-embedding-3-small |
+| Vector Database | Pinecone |
+| Programming Language | Python |
+| Environment Variables | python-dotenv |
+
+---
+
+# 🚀 Installation
+
+Clone repository
+
+```bash
+git clone https://github.com/yourusername/Toronto-RAG-Chatbot.git
+```
+
+Go inside project
+
+```bash
+cd Toronto-RAG-Chatbot
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# 🔑 Create .env
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+
+PINECONE_API_KEY=your_pinecone_api_key
+```
+
+---
+
+# ▶️ Run Ingestion Pipeline
+
+```bash
+python ingestion.py
+```
+
+This script
+
+- Loads documents
+- Splits them into chunks
+- Generates OpenAI embeddings
+- Stores vectors in Pinecone
+
+---
+
+# ▶️ Run Chatbot
+
+```bash
+streamlit run streamlitMain.py
+```
+
+Open
+
+```
+http://localhost:8501
+```
+
+---
+
+# 📚 Key Concepts
+
+- Retrieval-Augmented Generation (RAG)
+- LangChain
+- OpenAI GPT
+- Prompt Engineering
+- Semantic Search
+- Vector Embeddings
+- Pinecone
+- Conversation Memory
+- History Aware Retrieval
+- Streamlit
+
+---
+
+---
+
+# 🚀 Future Improvements
+
+To further improve retrieval accuracy and make the chatbot production-ready, the following enhancements can be implemented:
+
+### 🔹 Multi-Query RAG
+Generate multiple semantic variations (e.g., 5) of the user's query using an LLM instead of relying on a single query. This improves the chances of retrieving all relevant documents.
+
+### 🔹 Hybrid Search
+Combine **Vector Search (Pinecone)** with **Keyword Search (BM25 / Full-Text Search)**. This allows the system to retrieve both semantically similar documents and those containing exact keywords such as product names, IDs, or technical terms.
+
+### 🔹 Reciprocal Rank Fusion (RRF)
+Merge results from multiple retrieval strategies (Multi-Query + Hybrid Search) using **Reciprocal Rank Fusion (RRF)** to produce a more robust ranked list of documents.
+
+### 🔹 Semantic Reranking
+Use a reranking model (e.g., **Cohere Rerank**, **BGE Reranker**, or **CrossEncoder**) to reorder retrieved documents before passing them to the LLM, ensuring only the most relevant context is used.
+
+---
+
+## 🏗 Proposed Production RAG Pipeline
+
+```mermaid
+flowchart LR
+
+A["👤 User Query"]
+
+B["🤖 Generate 5 Query Variations"]
+
+C["🔎 Vector Search (Pinecone)"]
+
+D["🔍 Keyword Search (BM25)"]
+
+E["📊 Reciprocal Rank Fusion (RRF)"]
+
+F["⭐ Semantic Reranker"]
+
+G["📄 Top-k Relevant Chunks"]
+
+H["🧠 OpenAI GPT"]
+
+I["💬 Final Response"]
+
+A --> B
+
+B --> C
+B --> D
+
+C --> E
+D --> E
+
+E --> F
+
+F --> G
+
+G --> H
+
+H --> I
+```
+
+**Benefits**
+- ✅ Higher retrieval accuracy
+- ✅ Better document recall
+- ✅ Improved handling of exact keywords and IDs
+- ✅ Reduced hallucinations
+- ✅ Better responses for complex and ambiguous queries
+- ----
+
+# 🎯 Learning Outcomes
+
+Through this project I learned
+
+- Building production-ready RAG applications
+- Working with OpenAI APIs
+- Creating semantic search pipelines
+- Using Pinecone Vector Database
+- Prompt Engineering
+- LangChain Retrieval Chains
+- Multi-turn Conversation Memory
+- Deploying AI applications using Streamlit
+
+
+<p align="center">
+
+⭐ If you found this repository useful, don't forget to star it!
+
+</p>
