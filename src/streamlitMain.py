@@ -1,71 +1,97 @@
 import streamlit as st
-from RAG_ChatBot import ChatBot
+from chatbot import ChatBot
 
-# Load chatbot only once
+# ==========================================================
+# Page Configuration
+# ==========================================================
+
+st.set_page_config(
+    page_title="Toronto Travel Assistant",
+    page_icon="✈️",
+    layout="centered"
+)
+
+# ==========================================================
+# Load Chatbot (Runs Only Once)
+# ==========================================================
+
 @st.cache_resource
 def load_chatbot():
     return ChatBot()
 
 bot = load_chatbot()
 
-st.set_page_config(
-    page_title="Toronto Travel Assistant",
-    page_icon="✈️"
-)
+# ==========================================================
+# Title
+# ==========================================================
 
 st.title("✈️ Toronto Travel Assistant")
+st.caption("Powered by Groq • HuggingFace • Pinecone • LangChain")
 
-# Store chat history
+# ==========================================================
+# Initialize Chat History
+# ==========================================================
+
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
-            "role":"assistant",
-            "content":"Hello! I'm your Toronto Travel Assistant. Ask me anything."
+            "role": "assistant",
+            "content": (
+                "👋 Hello! I'm your Toronto Travel Assistant.\n\n"
+                "Ask me anything about Toronto based on the provided documents."
+            )
         }
     ]
 
-# Display history
-for msg in st.session_state.messages:
+# ==========================================================
+# Display Previous Messages
+# ==========================================================
 
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# User input
-if prompt := st.chat_input("Ask your question..."):
+# ==========================================================
+# User Input
+# ==========================================================
 
+prompt = st.chat_input("Ask a question...")
+
+if prompt:
+
+    # Show user message
     st.session_state.messages.append(
         {
-            "role":"user",
-            "content":prompt
+            "role": "user",
+            "content": prompt
         }
     )
 
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Generate response
     with st.chat_message("assistant"):
 
         with st.spinner("Searching documents..."):
 
             response = bot.chatbot.invoke(
-
-                {"input":prompt},
-
+                {"input": prompt},
                 config={
-                    "configurable":{
-                        "session_id":"streamlit_user"
+                    "configurable": {
+                        "session_id": "streamlit_user"
                     }
                 }
-
             )
 
             answer = response["answer"]
 
             st.markdown(answer)
 
+    # Save assistant response
     st.session_state.messages.append(
         {
-            "role":"assistant",
-            "content":answer
+            "role": "assistant",
+            "content": answer
         }
     )
