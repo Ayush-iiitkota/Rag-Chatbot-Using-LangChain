@@ -6,14 +6,12 @@ INGESTION PIPELINE
 Purpose:
 --------
 This script loads documents, splits them into chunks,
-creates embeddings using OpenAI, and stores them in
-Pinecone.
+creates embeddings using HuggingFace, and stores them
+in Pinecone.
 
 Run this script ONLY when:
 1. New documents are added
 2. Existing documents are modified
-
-You DO NOT run this script for every user query.
 
 =========================================================
 """
@@ -24,9 +22,10 @@ from dotenv import load_dotenv
 from pinecone import Pinecone, ServerlessSpec
 
 from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from langchain_openai import OpenAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_pinecone import PineconeVectorStore
 
 # =========================================================
@@ -36,7 +35,6 @@ from langchain_pinecone import PineconeVectorStore
 load_dotenv()
 
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 INDEX_NAME = "toronto-rag"
 
@@ -71,17 +69,22 @@ chunks = text_splitter.split_documents(documents)
 print(f"Created {len(chunks)} chunks.")
 
 # =========================================================
-# Step 3 : Initialize OpenAI Embedding Model
+# Step 3 : Initialize HuggingFace Embedding Model
 # =========================================================
 
-print("Initializing embedding model...")
+print("Initializing HuggingFace embedding model...")
 
-embeddings = OpenAIEmbeddings(
-    model="text-embedding-3-small",
-    api_key=OPENAI_API_KEY
+embeddings = HuggingFaceEmbeddings(
+    model_name="BAAI/bge-small-en-v1.5",
+    model_kwargs={
+        "device": "cpu"
+    },
+    encode_kwargs={
+        "normalize_embeddings": True
+    }
 )
 
-# OpenAI text-embedding-3-small produces 1536-dimensional vectors.
+# BAAI/bge-small-en-v1.5 produces 384-dimensional vectors.
 
 # =========================================================
 # Step 4 : Connect to Pinecone
@@ -103,7 +106,7 @@ if INDEX_NAME not in existing_indexes:
 
     pc.create_index(
         name=INDEX_NAME,
-        dimension=1536,
+        dimension=384,
         metric="cosine",
         spec=ServerlessSpec(
             cloud="aws",
@@ -115,7 +118,7 @@ else:
     print("Index already exists.")
 
 # =========================================================
-# Step 6 : Store Chunks into Pinecone
+# Step 6 : Upload Chunks to Pinecone
 # =========================================================
 
 print("Uploading vectors to Pinecone...")
@@ -134,4 +137,6 @@ print("\n========================================")
 print("Ingestion Completed Successfully!")
 print(f"Index Name : {INDEX_NAME}")
 print(f"Chunks Uploaded : {len(chunks)}")
+print("Embedding Model : BAAI/bge-small-en-v1.5")
+print("Vector Dimension : 384")
 print("========================================")
