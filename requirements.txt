@@ -14,4 +14,7 @@ sentence-transformers
 
 pinecone
 
+torch
+torchvision
+
 pypdf
