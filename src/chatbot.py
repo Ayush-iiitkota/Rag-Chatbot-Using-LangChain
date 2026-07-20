@@ -1,3 +1,5 @@
+import langchain
+print(langchain.__version__)
 import os
 from dotenv import load_dotenv
 
