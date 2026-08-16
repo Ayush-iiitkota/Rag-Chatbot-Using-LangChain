@@ -1,18 +1,19 @@
-streamlit
-python-dotenv
+# Pin pre-built wheels to avoid source compilation on Render free tier
+--prefer-binary
+
+streamlit==1.40.2
+python-dotenv==1.0.1
 
 # langchain
 langchain==0.3.27
 langchain-core==0.3.72
 langchain-community==0.3.27
-langchain-text-splitters
+langchain-text-splitters==0.3.8
 
-langchain-groq
-langchain-pinecone
+langchain-groq==0.3.2
+langchain-huggingface==0.1.2
+langchain-pinecone==0.2.0
 
-# Lightweight HF Inference API embeddings (no torch/sentence-transformers needed)
-langchain-huggingface
+pinecone==6.0.0
 
-pinecone
-
-pypdf
+pypdf==5.1.0
