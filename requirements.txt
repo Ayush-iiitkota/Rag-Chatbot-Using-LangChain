@@ -1,4 +1,4 @@
-# Pin pre-built wheels to avoid source compilation on Render free tier
+# --prefer-binary forces pip to use pre-built wheels (avoids source compilation)
 --prefer-binary
 
 streamlit==1.40.2
@@ -12,7 +12,7 @@ langchain-text-splitters==0.3.8
 
 langchain-groq==0.3.2
 langchain-huggingface==0.1.2
-langchain-pinecone==0.2.0
+langchain-pinecone==0.1.3
 
 pinecone==6.0.0
 
