@@ -35,8 +35,8 @@ The goal of this project is to develop a **domain-specific application** that co
 7. Open your web browser and navigate to the URL provided by Streamlit (usually http://localhost:8501).
 8. Interact with the chatbot by typing messages and receiving responses from the local LLM service.
 
-## Setting Up OpenAI API
-1. Enter our OpenAI account and navigate to [OpenAI Platform](https://platform.openai.com/apps). 
+## Setting Up Groq API
+1. Enter our OpenAI account and navigate to [Groq Platform]. 
 2. Navigate to the API section.
 3. Proceed to create a new API key by pressing '+ Create' new secret key.
 4. Select a suitable name to remember and press the Create secret key button.
