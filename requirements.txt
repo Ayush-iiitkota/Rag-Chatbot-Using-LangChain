@@ -1,19 +1,18 @@
 streamlit
 python-dotenv
 
-langchain
-langchain-core
-langchain-community
+# langchain
+langchain==0.3.27
+langchain-core==0.3.72
+langchain-community==0.3.27
 langchain-text-splitters
 
 langchain-groq
-langchain-huggingface
 langchain-pinecone
 
-sentence-transformers
-pinecone
+# Lightweight HF Inference API embeddings (no torch/sentence-transformers needed)
+langchain-huggingface
 
-torch
-torchvision
+pinecone
 
 pypdf
